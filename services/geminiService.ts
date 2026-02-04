@@ -3,7 +3,8 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { SYSTEM_INSTRUCTION } from "../constants";
 import { ScaffoldingLevel } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+// Always use the process.env.API_KEY directly in the named parameter.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export interface AnalysisResult {
   level: ScaffoldingLevel;
@@ -18,7 +19,8 @@ export const analyzeResponse = async (
   reasoning: string,
   attempts: number
 ): Promise<AnalysisResult> => {
-  const model = 'gemini-3-flash-preview';
+  // Use gemini-3-pro-preview for complex reasoning and mathematical literacy tasks.
+  const model = 'gemini-3-pro-preview';
   
   const prompt = `
     Context: ${problemContext}
@@ -58,6 +60,7 @@ export const analyzeResponse = async (
   });
 
   try {
+    // Access the .text property directly (not a method).
     const result = JSON.parse(response.text || '{}');
     return result as AnalysisResult;
   } catch (error) {
